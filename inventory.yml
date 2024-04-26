@@ -1,0 +1,13 @@
+firewall:
+  hosts:
+    192.168.0.1:
+    192.168.0.2:
+  vars:
+    ansible_user: user
+    ansible_ssh_pass: pass
+    ansible_become: true
+    ansible_become_method: ansible.netcommon.enable
+    ansible_become_pass: enable_pass
+    ansible_connection: ansible.netcommon.network_cli
+    ansible_network_os: cisco.asa.asa
+    ansible_python_interpreter: python

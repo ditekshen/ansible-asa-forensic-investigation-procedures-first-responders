@@ -1,0 +1,401 @@
+---
+- hosts: all
+  gather_facts: false
+  connection: network_cli
+
+  collections:
+    - cisco.asa
+
+  vars:
+    execute_optional_cmds: true
+    step_one:
+      problem_description: |
+              ArcaneDoor - Cisco ASA Forensic Investigation Procedures for First Responders
+              https://blog.talosintelligence.com/arcanedoor-new-espionage-focused-campaign-found-targeting-perimeter-network-devices/
+              https://sec.cloudapps.cisco.com/security/center/resources/forensic_guides/asa_forensic_investigation.html
+    step_two_cmd:
+      show_tech_support_cmd: show tech-support detail
+      dir_recursive_all_filesystems_cmd: dir /recursive all-filesystems
+      dir_recursive_cache_cmd: 'dir /recursive cache:'
+      show_history_cmd: show history
+      show_clock_detail_cmd: show clock detail
+      show_startup_config_cmd: show startup-config
+      show_reload_cmd: show reload
+      show_processes_cmd: show processes
+      show_kernel_process_detail_cmd: show kernel process detail
+      show_kernel_iconfig_cmd: show kernel ifconfig
+      show_kernel_module_cmd: show kernel module
+      show_logging_cmd: show logging
+      show_route_cmd: show route
+      show_eigrp_neighbor_cmd: show eigrp neighbor
+      show_ospf_neighbor_cmd: show ospf neighbor
+      show_bgp_summary_cmd: show bgp summary
+      show_arp_cmd: show arp
+      show_ip_address_cmd: show ip address
+      show_interface_ip_brief_cmd: show interface ip brief
+      show_nat_detail_cmd: show nat detail
+      show_snmp_server_user_cmd: show snmp-server user
+      show_snmp_server_group_cmd: show snmp-server group
+      show_ipv6_interface_brief_cmd: show ipv6 interface brief
+      show_ipv6_route_cmd: show ipv6 route
+      show_conn_all_cmd: show conn all
+      show_xlate_cmd: show xlate
+      show_aaa_login_history_cmd: show aaa login-history
+    step_three_cmd:
+      show_version_image_cmd: 'show version | inc image'
+      asa_disk_image_path_pattern: 'disk\d:.*\.(SPA|bin)'
+      verify_sha512_cmd: 'verify /sha-512'
+      verify_md5_cmd: 'verify /md5'
+    step_four_cmd:
+      not_implemented: 'No capability to assess - SW/HW limitation'
+    step_five_cmd:
+      show_version_cmd: 'show version | inc Version'
+      verify_memory_sha512_cmd: 'verify /sha-512 system:memory/text'
+      verify_memory_md5_cmd: 'verify /md5 system:memory/text'
+      core_generation: 'Disruptive - will not be implemented'
+    step_six_cmd:
+      not_implemented: 'Disruptive - will not be implemented'
+    step_seven_cmd:
+      show_run_webvpn: 'show run | begin webvpn'
+      show_import_webvpn_plugin_detail: show import webvpn plug-in detail
+    step_eight_cmd:
+      show_memory_region_cmd: 'show memory region | include lina'
+
+  tasks:
+#    This command fails despite it returning results.
+#    - name: Document the ASA Runtime Environment - show tech-support detail
+#      cisco.asa.asa_command:
+#        commands:
+#          - "{{ show_tech_support_cmd }}"
+#      register: asa_tech_support
+#      ignore_errors: true
+#
+
+    - name: Step Two - Document the ASA Runtime Environment - dir /recursive all-filesystems
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.dir_recursive_all_filesystems_cmd }}"
+      register: asa_dir_recursive_all_filesystems
+      ignore_errors: true
+
+    - name: Step Two - Document the ASA Runtime Environment - dir /recursive cache
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.dir_recursive_cache_cmd }}"
+      register: asa_dir_recursive_cache
+      ignore_errors: true
+
+    - name: Step Five - ASA Memory Dump and Core File Generation - Get the ASA version
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_five_cmd.show_version_cmd }}"
+      register: asa_version
+      ignore_errors: true
+
+    - name: Step Two - Document the ASA Runtime Environment - show history
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_history_cmd }}"
+      register: asa_history
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show clock detail
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_clock_detail_cmd }}"
+      register: asa_clock_detail
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show startup-config
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_startup_config_cmd }}"
+      register: asa_startup_config
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show reload
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_reload_cmd }}"
+      register: asa_reload
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show processes
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_processes_cmd }}"
+      register: asa_processes
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show kernel process detail
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_kernel_process_detail_cmd }}"
+      register: asa_kernel_process_detail
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show kernel ifconfig
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_kernel_iconfig_cmd }}"
+      register: asa_kernel_ifconfig
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show kernel module
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_kernel_module_cmd }}"
+      register: asa_kernel_module
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show logging
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_logging_cmd }}"
+      register: asa_logging
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show route
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_route_cmd }}"
+      register: asa_route
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show eigrp neighbor
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_eigrp_neighbor_cmd }}"
+      register: asa_eigrp_neighbor
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show ospf neighbor
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_ospf_neighbor_cmd }}"
+      register: asa_ospf_neighbor
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show bgp summary
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_bgp_summary_cmd }}"
+      register: asa_bgp_summary
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show arp
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_arp_cmd }}"
+      register: asa_arp
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show ip address
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_ip_address_cmd }}"
+      register: asa_ip_address
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show interface ip brief
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_interface_ip_brief_cmd }}"
+      register: asa_interface_ip_brief
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show nat detail
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_nat_detail_cmd }}"
+      register: asa_nat_detail
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show snmp-server user
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_snmp_server_user_cmd }}"
+      register: asa_snmp_server_user
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show snmp-server group
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_snmp_server_group_cmd }}"
+      register: asa_snmp_server_group
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show ipv6 interface brief
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_ipv6_interface_brief_cmd }}"
+      register: asa_ipv6_interface_brief
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show ipv6 route
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_ipv6_route_cmd }}"
+      register: asa_ipv6_route
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show conn all
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_conn_all_cmd }}"
+      register: asa_conn_all
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show xlate
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_xlate_cmd }}"
+      register: asa_xlate
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Two - Document the ASA Runtime Environment - show aaa login-history
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_two_cmd.show_aaa_login_history_cmd }}"
+      register: asa_aaa_login_history
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Step Three - ASA Image File Hash Verification - show version | inc image
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_three_cmd.show_version_image_cmd }}"
+      register: asa_version_image
+      ignore_errors: true
+
+    - name: Step Three - ASA Image File Hash Verification - Set fact for ASA image path
+      ansible.builtin.set_fact:
+         asa_image_path: "{{ asa_version_image.stdout_lines | regex_search(step_three_cmd.asa_disk_image_path_pattern) }}"
+
+    - name: Step Three - ASA Image File Hash Verification - verify /sha-512
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_three_cmd.verify_sha512_cmd }} {{ asa_image_path }}"
+      register: asa_image_verify_sha512
+      ignore_errors: true
+
+    - name: Step Three - ASA Image File Hash Verification - verify /md5
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_three_cmd.verify_md5_cmd }} {{ asa_image_path }}"
+      register: asa_image_verify_md5
+      ignore_errors: true
+
+    - name: Step Five - ASA Memory Dump and Core File Generation - Get the ASA version
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_five_cmd.show_version_cmd }}"
+      register: asa_version
+      ignore_errors: true
+
+    - name: Step Five - ASA Memory Dump and Core File Generation - verify /sha-512
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_five_cmd.verify_memory_sha512_cmd }}"
+      register: asa_memory_verify_sha512
+      ignore_errors: true
+
+    - name: Step Five - ASA Memory Dump and Core File Generation - verify /md5
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_five_cmd.verify_memory_md5_cmd }}"
+      register: asa_memory_verify_md5
+      ignore_errors: true
+
+    - name: Step Seven - SSL VPN Configuration Integrity Check - show run | begin webvpn
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_seven_cmd.show_run_webvpn }}"
+      register: asa_webvpn
+      ignore_errors: true
+
+    - name: Step Seven -SSL VPN Configuration Integrity Check - show import webvpn plug-in detail
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_seven_cmd.show_import_webvpn_plugin_detail }}"
+      register: asa_webvpn_plugin
+      ignore_errors: true
+
+    - name: Step Eight - Show Lina Memory Region
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_eight_cmd.show_memory_region_cmd }}"
+      register: asa_memory_region
+      ignore_errors: true
+      when: execute_optional_cmds | bool
+
+    - name: Write results to local file
+      blockinfile:
+        block: "{{ item.cmd }}{{ item.output | to_nice_yaml }}"
+        dest: "{{ inventory_hostname }}.txt"
+        create: true
+        state: present
+        insertafter: EOF
+        append_newline: true
+        prepend_newline: true
+        marker: "------------------------------------------------------------------------------"
+      loop:
+        - { cmd: "Step One - ASA Device Problem Description\n", output: "{{ step_one.problem_description }}" }
+#        - { cmd: "# {{ step_two_cmd.show_tech_support_cmd }}:\n", output: "{{ asa_tech_support.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.dir_recursive_all_filesystems_cmd }}:\n", output: "{{ asa_dir_recursive_all_filesystems.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.dir_recursive_cache_cmd }}:\n", output: "{{ asa_dir_recursive_cache.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_history_cmd }}:\n", output: "{{ asa_history.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_clock_detail_cmd }}:\n", output: "{{ asa_clock_detail.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_startup_config_cmd }}:\n", output: "{{ asa_startup_config.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_reload_cmd }}:\n", output: "{{ asa_reload.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_processes_cmd }}:\n", output: "{{ asa_processes.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_kernel_process_detail_cmd }}:\n", output: "{{ asa_kernel_process_detail.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_kernel_iconfig_cmd }}:\n", output: "{{ asa_kernel_ifconfig.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_kernel_module_cmd }}:\n", output: "{{ asa_kernel_module.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_logging_cmd }}:\n", output: "{{ asa_logging.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_route_cmd }}:\n", output: "{{ asa_route.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_eigrp_neighbor_cmd }}:\n", output: "{{ asa_eigrp_neighbor.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_ospf_neighbor_cmd }}:\n", output: "{{ asa_ospf_neighbor.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_bgp_summary_cmd }}:\n", output: "{{ asa_bgp_summary.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_arp_cmd }}:\n", output: "{{ asa_arp.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_ip_address_cmd }}:\n", output: "{{ asa_ip_address.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_interface_ip_brief_cmd }}:\n", output: "{{ asa_interface_ip_brief.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_nat_detail_cmd }}:\n", output: "{{ asa_nat_detail.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_snmp_server_user_cmd }}:\n", output: "{{ asa_snmp_server_user.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_snmp_server_group_cmd }}:\n", output: "{{ asa_snmp_server_group.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_ipv6_interface_brief_cmd }}:\n", output: "{{ asa_ipv6_interface_brief.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_ipv6_route_cmd }}:\n", output: "{{ asa_ipv6_route.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_conn_all_cmd }}:\n", output: "{{ asa_conn_all.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_xlate_cmd }}:\n", output: "{{ asa_xlate.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.show_aaa_login_history_cmd }}:\n", output: "{{ asa_aaa_login_history.stdout_lines }}" }
+        - { cmd: "# {{ step_three_cmd.verify_sha512_cmd }} {{ asa_image_path }}:\n", output: "{{ asa_image_verify_sha512.stdout_lines | regex_search('verify.*') }}" }
+        - { cmd: "# {{ step_three_cmd.verify_md5_cmd }} {{ asa_image_path }}:\n", output: "{{ asa_image_verify_md5.stdout_lines | regex_search('verify.*') }}" }
+        - { cmd: "# {{ step_five_cmd.show_version_cmd }}:\n", output: "{{ asa_version.stdout_lines }}" }
+        - { cmd: "# {{ step_five_cmd.verify_memory_sha512_cmd }}:\n", output: "{{ asa_memory_verify_sha512.stdout_lines | regex_search('verify.*') }}" }
+        - { cmd: "# {{ step_five_cmd.verify_memory_md5_cmd }}:\n", output: "{{ asa_memory_verify_md5.stdout_lines | regex_search('verify.*') }}" }
+        - { cmd: "# {{ step_seven_cmd.show_run_webvpn }}:\n", output: "{{ asa_webvpn.stdout_lines }}" }
+        - { cmd: "# {{ step_seven_cmd.show_import_webvpn_plugin_detail }}:\n", output: "{{ asa_webvpn_plugin.stdout_lines }}" }
+        - { cmd: "# {{ step_eight_cmd.show_memory_region_cmd }}:\n", output: "{{ asa_memory_region.stdout_lines }}" }

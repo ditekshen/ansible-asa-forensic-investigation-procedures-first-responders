@@ -43,7 +43,7 @@
       show_aaa_login_history_cmd: show aaa login-history
     step_three_cmd:
       show_version_image_cmd: 'show version | inc image'
-      asa_disk_image_path_pattern: 'disk\d:.*\.(SPA|bin)'
+      asa_disk_image_path_pattern: '(boot|disk\d):.*\.(SPA|bin)'
       verify_sha512_cmd: 'verify /sha-512'
       verify_md5_cmd: 'verify /md5'
     step_four_cmd:

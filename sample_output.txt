@@ -1,0 +1,1034 @@
+------------------------------------------------------------------------------
+Step One - ASA Device Problem Description
+'ArcaneDoor - Cisco ASA Forensic Investigation Procedures for First Responders
+
+    https://blog.talosintelligence.com/arcanedoor-new-espionage-focused-campaign-found-targeting-perimeter-network-devices/
+
+    https://sec.cloudapps.cisco.com/security/center/resources/forensic_guides/asa_forensic_investigation.html
+
+    '
+------------------------------------------------------------------------------
+# dir /recursive all-filesystems:
+-   - Directory of disk0:/*
+    - ''
+    - 31     -rwx  51964        10:12:13 Apr 27 2024  system_kernel.log
+    - 33     -rwx  2310         10:12:13 Apr 27 2024  asa-cmd-server.log
+    - 34     -rwx  39           10:12:07 Apr 27 2024  snortpacketinfo.conf
+    - 35     -rwx  9042         10:12:09 Apr 27 2024  dpdk.log
+    - 81     -rwx  80654        10:54:53 Apr 27 2024  debug_output.2024.04.27-10.54.53
+    - 82     -rwx  147345408    12:30:18 Apr 27 2024  asa9-18-4-22-smp-k8.bin
+    - 83     -rwx  80628        12:30:54 Apr 27 2024  debug_output.2024.04.27-12.30.54
+    - 84     -rwx  80634        12:32:41 Apr 27 2024  debug_output.2024.04.27-12.32.41
+    - 85     -rwx  80630        12:34:46 Apr 27 2024  debug_output.2024.04.27-12.34.46
+    - 86     -rwx  80629        12:41:00 Apr 27 2024  debug_output.2024.04.27-12.41.00
+    - 87     -rwx  80639        12:56:17 Apr 27 2024  debug_output.2024.04.27-12.56.16
+    - 88     -rwx  80638        13:00:15 Apr 27 2024  debug_output.2024.04.27-13.00.15
+    - 89     -rwx  80635        13:02:20 Apr 27 2024  debug_output.2024.04.27-13.02.20
+    - 90     -rwx  80636        13:04:56 Apr 27 2024  debug_output.2024.04.27-13.04.56
+    - 91     -rwx  80632        13:06:28 Apr 27 2024  debug_output.2024.04.27-13.06.28
+    - 92     -rwx  80638        13:12:46 Apr 27 2024  debug_output.2024.04.27-13.12.46
+    - 93     -rwx  80641        13:17:45 Apr 27 2024  debug_output.2024.04.27-13.17.45
+    - 95     -rwx  80636        13:22:49 Apr 27 2024  debug_output.2024.04.27-13.22.49
+    - Directory of disk0:/smart-log
+    - ''
+    - 40     -rwx  188762       12:24:44 Apr 27 2024  agentlog
+    - ''
+    - Directory of disk0:/log
+    - ''
+    - 32     -rwx  1722         10:12:47 Apr 27 2024  lina_monitor.log
+    - 38     -rwx  3572         10:12:13 Apr 27 2024  asa_snmp.log
+    - Directory of disk0:/log/lina_sshd
+    - ''
+    - 30     -rwx  302          10:12:05 Apr 27 2024  scp_helper.log
+    - ''
+    - Directory of disk0:/packet-tracer
+    - ''
+    - No files in directory
+    - ''
+    - Directory of disk0:/coredumpinfo
+    - ''
+    - 74     -rwx  59           10:12:47 Apr 27 2024  coredump.cfg
+    - ''
+    - '23 file(s) total size: 148651450 bytes'
+    - 8571076608 bytes total (8400670720 bytes free/98% free)
+    - ''
+    - Directory of boot:/*
+    - ''
+    - 78     -rwx  147345408    17:41:22 Mar 01 2024  asa9184-22-smp-k8.bin
+    - 79     -rwx  116438024    17:41:22 Mar 01 2024  asdm-719195.bin
+    - 80     -rwx  73070640     17:41:22 Mar 01 2024  asa-restapi-7171160-lfbff-k8.SPA
+    - ''
+    - '3 file(s) total size: 336854072 bytes'
+    - 534495232 bytes total (197476352 bytes free/36% free)
+------------------------------------------------------------------------------
+# dir /recursive cache::
+Command is NOT supported on device
+------------------------------------------------------------------------------
+# show history:
+-   - enable
+    - '  no terminal pager'
+    - '  show version'
+    - '  dir /recursive all-filesystems'
+    - '  dir /recursive cache:'
+------------------------------------------------------------------------------
+# show clock detail:
+-   - 13:26:08.883 UTC Sat Apr 27 2024
+    - Time source is FXOS
+------------------------------------------------------------------------------
+# show startup-config:
+-   - ': Saved'
+    - ''
+    - ': '
+    - ': Serial Number: 9AULCM3AHL3'
+    - ': Hardware:   ASAv, 2048 MB RAM, CPU Xeon E5 series 3000 MHz'
+    - ': Written by admin at 12:24:44.883 UTC Sat Apr 27 2024'
+    - '!'
+    - 'ASA Version 9.18(4)22 '
+    - '!'
+    - hostname ciscoasa
+    - enable password ***** pbkdf2
+    - service-module 0 keepalive-timeout 4
+    - service-module 0 keepalive-counter 6
+    - names
+    - no mac-address auto
+    - ''
+    - '!'
+    - interface GigabitEthernet0/0
+    - ' shutdown'
+    - ' no nameif'
+    - ' no security-level'
+    - ' no ip address'
+    - '!'
+    - interface GigabitEthernet0/1
+    - ' shutdown'
+    - ' no nameif'
+    - ' no security-level'
+    - ' no ip address'
+    - '!'
+    - interface GigabitEthernet0/2
+    - ' shutdown'
+    - ' no nameif'
+    - ' no security-level'
+    - ' no ip address'
+    - '!'
+    - interface GigabitEthernet0/3
+    - ' shutdown'
+    - ' no nameif'
+    - ' no security-level'
+    - ' no ip address'
+    - '!'
+    - interface GigabitEthernet0/4
+    - ' shutdown'
+    - ' no nameif'
+    - ' no security-level'
+    - ' no ip address'
+    - '!'
+    - interface GigabitEthernet0/5
+    - ' shutdown'
+    - ' no nameif'
+    - ' no security-level'
+    - ' no ip address'
+    - '!'
+    - interface GigabitEthernet0/6
+    - ' shutdown'
+    - ' no nameif'
+    - ' no security-level'
+    - ' no ip address'
+    - '!'
+    - interface GigabitEthernet0/7
+    - ' shutdown'
+    - ' no nameif'
+    - ' no security-level'
+    - ' no ip address'
+    - '!'
+    - interface GigabitEthernet0/8
+    - ' shutdown'
+    - ' no nameif'
+    - ' no security-level'
+    - ' no ip address'
+    - '!'
+    - interface Management0/0
+    - ' no management-only'
+    - ' nameif mgmt'
+    - ' security-level 100'
+    - ' ip address dhcp setroute '
+    - '!'
+    - ftp mode passive
+    - no object-group-search access-control
+    - pager lines 23
+    - mtu mgmt 1500
+    - no failover
+    - no failover wait-disable
+    - icmp unreachable rate-limit 1 burst-size 1
+    - no asdm history enable
+    - arp timeout 14400
+    - no arp permit-nonconnected
+    - arp rate-limit 8192
+    - timeout xlate 3:00:00
+    - timeout pat-xlate 0:00:30
+    - timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 sctp 0:02:00 icmp 0:00:02
+    - timeout sunrpc 0:10:00 h323 0:05:00 h225 1:00:00 mgcp 0:05:00 mgcp-pat 0:05:00
+    - timeout sip 0:30:00 sip_media 0:02:00 sip-invite 0:03:00 sip-disconnect 0:02:00
+    - timeout sip-provisional-media 0:02:00 uauth 0:05:00 absolute
+    - timeout tcp-proxy-reassembly 0:01:00
+    - timeout floating-conn 0:00:00
+    - timeout conn-holddown 0:00:15
+    - timeout igp stale-route 0:01:10
+    - user-identity default-domain LOCAL
+    - 'aaa authentication ssh console LOCAL '
+    - 'aaa authentication enable console LOCAL '
+    - 'aaa authentication serial console LOCAL '
+    - aaa authentication login-history
+    - http server enable
+    - no snmp-server location
+    - no snmp-server contact
+    - crypto ipsec security-association pmtu-aging infinite
+    - crypto ca trustpoint _SmartCallHome_ServerCA
+    - ' no validation-usage'
+    - ' crl configure'
+    - crypto ca trustpoint _SmartCallHome_ServerCA2
+    - ' no validation-usage'
+    - ' crl configure'
+    - crypto ca trustpool policy
+    - ' auto-import'
+    - crypto ca certificate chain _SmartCallHome_ServerCA
+    - ' certificate ca 0a0142800000014523c844b500000002'
+    - '    30820560 30820348 a0030201 0202100a 01428000 00014523 c844b500 00000230 '
+    - '    0d06092a 864886f7 0d01010b 0500304a 310b3009 06035504 06130255 53311230 '
+    - '    10060355 040a1309 4964656e 54727573 74312730 25060355 0403131e 4964656e '
+    - '    54727573 7420436f 6d6d6572 6369616c 20526f6f 74204341 2031301e 170d3134 '
+    - '    30313136 31383132 32335a17 0d333430 31313631 38313232 335a304a 310b3009 '
+    - '    06035504 06130255 53311230 10060355 040a1309 4964656e 54727573 74312730 '
+    - '    25060355 0403131e 4964656e 54727573 7420436f 6d6d6572 6369616c 20526f6f '
+    - '    74204341 20313082 0222300d 06092a86 4886f70d 01010105 00038202 0f003082 '
+    - '    020a0282 020100a7 5019de3f 993dd433 46f16f51 6182b2a9 4f8f6789 5d84d953 '
+    - '    dd0c28d9 d7f0ffae 95437299 f9b55d7c 8ac142e1 315074d1 810d7ccd 9b21ab43 '
+    - '    e2acad5e 866ef309 8a1f5a32 bda2eb94 f9e85c0a ecff98d2 af71b3b4 539f4e87 '
+    - '    ef92bcbd ec4f3230 884b175e 57c453c2 f602978d d9622bbf 241f628d dfc3b829 '
+    - '    4b49783c 93608822 fc99da36 c8c2a2d4 2c540067 356e73bf 0258f0a4 dde5b0a2 '
+    - '    267acae0 36a51916 f5fdb7ef ae3f40f5 6d5a04fd ce34ca24 dc74231b 5d331312 '
+    - '    5dc40125 f630dd02 5d9fe0d5 47bdb4eb 1ba1bb49 49d89f5b 02f38ae4 2490e462 '
+    - '    4f4fc1af 8b0e7417 a8d17288 6a7a0149 ccb44679 c617b1da 981e0759 fa752185 '
+    - '    65dd9056 cefbaba5 609dc49d f952b08b bd87f98f 2b230a23 763bf733 e1c900f3 '
+    - '    69f94ba2 e04ebc7e 93398407 f744707e fe075ae5 b1acd118 ccf235e5 494908ca '
+    - '    56c93dfb 0f187d8b 3bc113c2 4d8fc94f 0e37e91f a10e6adf 622ecb35 0651792c '
+    - '    c82538f4 fa4ba789 5c9cd2e3 0d39864a 747cd559 87c23f4e 0c5c52f4 3df75282 '
+    - '    f1eaa3ac fd49341a 28f34188 3a13eee8 deff991d 5fbacbe8 1ef2b950 60c031d3 '
+    - '    73e5efbe a0ed330b 74be2020 c4676cf0 08037a55 807f464e 96a7f41e 3ee1f6d8 '
+    - '    09e13364 2b63d732 5e9ff9c0 7b0f786f 97bc939a f99c1290 787a8087 15d77274 '
+    - '    9c557478 b1bae16e 7004ba4f a0ba68c3 7bff31f0 733d3d94 2ab10b41 0ea0fe4d '
+    - '    88656b79 33b4d702 03010001 a3423040 300e0603 551d0f01 01ff0404 03020106 '
+    - '    300f0603 551d1301 01ff0405 30030101 ff301d06 03551d0e 04160414 ed4419c0 '
+    - '    d3f0068b eea47bbe 42e72654 c88e3676 300d0609 2a864886 f70d0101 0b050003 '
+    - '    82020100 0dae9032 f6a64b7c 44761961 1e2728cd 5e54ef25 bce30890 f929d7ae '
+    - '    6808e194 0058ef2e 2e7e5352 8cb65c07 ea88ba99 8b5094d7 8280df61 090093ad '
+    - '    0d14e6ce c1f23794 78b05f9c b3a273b8 8f059338 cd8d3eb0 b8fbc0cf b1f2ec2d '
+    - '    2d1bccec aa9ab3aa 60821b2d 3bc3843d 578a961e 9c75b8d3 30cd6008 8390d38e '
+    - '    54f14d66 c05d7403 40a3ee85 7ec21f77 9c06e8c1 a7185d52 95edc9dd 259e6dfa '
+    - '    a9eda33a 34d0597b daed50f3 35bfedeb 144d31c7 60f4daf1 879ce248 e2c6c537 '
+    - '    fb0610fa 75596631 4729da76 9a1ce982 aeef9ab9 51f78823 9a699562 3ce55580 '
+    - '    36d75402 fff1b95d ced4236f d845844a 5b65ef89 0cdd14a7 20cb18a5 25b40df9 '
+    - '    01f0a2d2 f400c874 8ea12a48 8e65db13 c4e22517 7debbe87 5b172054 51934a53 '
+    - '    030bec5d ca33ed62 fd45c72f 5bdc58a0 8039e6fa d7fe1314 a6ed3d94 4a4274d4 '
+    - '    c3775973 cd8f46be 5538effa e89132ea 97580422 de38c3cc bc6dc933 3a6a0a69 '
+    - '    3fa0c8ea 728f8c63 8623bd6d 3c969e95 e0494caa a2b92a1b 9c368178 edc3e846 '
+    - '    e2265944 751ed975 8951cd10 849d6160 cb5df997 224d8e98 e6e37ff6 5bbbaecd '
+    - '    ca4a816b 5e0bf351 e1742be9 7e27a7d9 99494ef8 a580db25 0f1c6362 8ac93367 '
+    - '    6b3c1083 c6addea8 cd168e8d f0073771 9ff2abfc 41f5c18b ec00375d 09e54e80 '
+    - '    effab15c 3806a51b 4ae1dc38 2d3cdcab 1f901ad5 4a9ceed1 706cccee f457f818 '
+    - '    ba846e87'
+    - '  quit'
+    - crypto ca certificate chain _SmartCallHome_ServerCA2
+    - ' certificate ca 0509'
+    - '    308205b7 3082039f a0030201 02020205 09300d06 092a8648 86f70d01 01050500 '
+    - '    3045310b 30090603 55040613 02424d31 19301706 0355040a 13105175 6f566164 '
+    - '    6973204c 696d6974 6564311b 30190603 55040313 1251756f 56616469 7320526f '
+    - '    6f742043 41203230 1e170d30 36313132 34313832 3730305a 170d3331 31313234 '
+    - '    31383233 33335a30 45310b30 09060355 04061302 424d3119 30170603 55040a13 '
+    - '    1051756f 56616469 73204c69 6d697465 64311b30 19060355 04031312 51756f56 '
+    - '    61646973 20526f6f 74204341 20323082 0222300d 06092a86 4886f70d 01010105 '
+    - '    00038202 0f003082 020a0282 0201009a 18ca4b94 0d002daf 03298af0 0f81c8ae '
+    - '    4c19851d 089fab29 4485f32f 81ad321e 9046bfa3 86261a1e fe7e1c18 3a5c9c60 '
+    - '    172a3a74 8333307d 615411cb edabe0e6 d2a27ef5 6b6f18b7 0a0b2dfd e93eef0a '
+    - '    c6b310e9 dcc24617 f85dfda4 daff9e49 5a9ce633 e62496f7 3fba5b2b 1c7a35c2 '
+    - '    d667feab 66508b6d 28602bef d760c3c7 93bc8d36 91f37ff8 db1113c4 9c7776c1 '
+    - '    aeb7026a 817aa945 83e205e6 b956c194 378f4871 6322ec17 6507958a 4bdf8fc6 '
+    - '    5a0ae5b0 e35f5e6b 11ab0cf9 85eb44e9 f80473f2 e9fe5c98 8cf573af 6bb47ecd '
+    - '    d45c022b 4c39e1b2 95952d42 87d7d5b3 9043b76c 13f1dedd f6c4f889 3fd175f5 '
+    - '    92c391d5 8a88d090 ecdc6dde 89c26571 968b0d03 fd9cbf5b 16ac92db eafe797c '
+    - '    adebaff7 16cbdbcd 252be51f fb9a9fe2 51cc3a53 0c48e60e bdc9b476 0652e611 '
+    - '    13857263 0304e004 362b2019 02e874a7 1fb6c956 66f07525 dc67c10e 616088b3 '
+    - '    3ed1a8fc a3da1db0 d1b12354 df44766d ed41d8c1 b222b653 1cdf351d dca1772a '
+    - '    31e42df5 e5e5dbc8 e0ffe580 d70b63a0 ff33a10f ba2c1515 ea97b3d2 a2b5bef2 '
+    - '    8c961e1a 8f1d6ca4 6137b986 7333d797 969e237d 82a44c81 e2a1d1ba 675f9507 '
+    - '    a32711ee 16107bbc 454a4cb2 04d2abef d5fd0c51 ce506a08 31f991da 0c8f645c '
+    - '    03c33a8b 203f6e8d 673d3ad6 fe7d5b88 c95efbcc 61dc8b33 77d34432 35096204 '
+    - '    921610d8 9e2747fb 3b21e3f8 eb1d5b02 03010001 a381b030 81ad300f 0603551d '
+    - '    130101ff 04053003 0101ff30 0b060355 1d0f0404 03020106 301d0603 551d0e04 '
+    - '    1604141a 8462bc48 4c332504 d4eed0f6 03c41946 d1946b30 6e060355 1d230467 '
+    - '    30658014 1a8462bc 484c3325 04d4eed0 f603c419 46d1946b a149a447 3045310b '
+    - '    30090603 55040613 02424d31 19301706 0355040a 13105175 6f566164 6973204c '
+    - '    696d6974 6564311b 30190603 55040313 1251756f 56616469 7320526f 6f742043 '
+    - '    41203282 02050930 0d06092a 864886f7 0d010105 05000382 0201003e 0a164d9f '
+    - '    065ba8ae 715d2f05 2f67e613 4583c436 f6f3c026 0c0db547 645df8b4 72c946a5 '
+    - '    03182755 89787d76 ea963480 1720dce7 83f88dfc 07b8da5f 4d2e67b2 84fdd944 '
+    - '    fc775081 e67cb4c9 0d0b7253 f8760707 4147960c fbe08226 93558cfe 221f6065 '
+    - '    7c5fe726 b3f73290 9850d437 7155f692 2178f795 79faf82d 26876656 3077a637 '
+    - '    78335210 58ae3f61 8ef26ab1 ef187e4a 5963ca8d a256d5a7 2fbc561f cf39c1e2 '
+    - '    fb0aa815 2c7d4d7a 63c66c97 443cd26f c34a170a f890d257 a21951a5 2d9741da '
+    - '    074fa950 da908d94 46e13ef0 94fd1000 38f53be8 40e1b46e 561a20cc 6f588ded '
+    - '    2e458fd6 e9933fe7 b12cdf3a d6228cdc 84bb226f d0f8e4c6 39e90488 3cc3baeb '
+    - '    557a6d80 9924f56c 01fbf897 b0945beb fdd26ff1 77680d35 6423acb8 55a103d1 '
+    - '    4d4219dc f8755956 a3f9a849 79f8af0e b911a07c b76aed34 d0b62662 381a870c '
+    - '    f8e8fd2e d3907f07 912a1dd6 7e5c8583 99b03808 3fe95ef9 3507e4c9 626e577f '
+    - '    a75095f7 bac89be6 8ea201c5 d666bf79 61f33c1c e1b9825c 5da0c3e9 d848bd19 '
+    - '    a2111419 6eb2861b 683e4837 1a88b75d 965e9cc7 ef276208 e291195c d2f121dd '
+    - '    ba174282 97718153 31a99ff6 7d62bf72 e1a3931d cc8a265a 0938d0ce d70d8016 '
+    - '    b478a53a 874c8d8a a5d54697 f22c10b9 bc5422c0 01506943 9ef4b2ef 6df8ecda '
+    - '    f1e3b1ef df918f54 2a0b25c1 2619c452 100565d5 8210eac2 31cd2e'
+    - '  quit'
+    - telnet timeout 5
+    - no ssh stack ciscossh
+    - ssh scopy enable
+    - no ssh stricthostkeycheck
+    - ssh timeout 60
+    - ssh version 2
+    - ssh key-exchange group dh-group14-sha256
+    - ssh 0.0.0.0 0.0.0.0 mgmt
+    - console timeout 0
+    - threat-detection basic-threat
+    - threat-detection statistics access-list
+    - no threat-detection statistics tcp-intercept
+    - dynamic-access-policy-record DfltAccessPolicy
+    - username admin password ***** pbkdf2 privilege 15
+    - '!'
+    - class-map inspection_default
+    - ' match default-inspection-traffic'
+    - '!'
+    - '!'
+    - policy-map type inspect dns preset_dns_map
+    - ' parameters'
+    - '  message-length maximum client auto'
+    - '  message-length maximum 512'
+    - '  no tcp-inspection'
+    - policy-map global_policy
+    - ' class inspection_default'
+    - '  inspect ip-options '
+    - '  inspect netbios '
+    - '  inspect rtsp '
+    - '  inspect sunrpc '
+    - '  inspect tftp '
+    - '  inspect dns preset_dns_map '
+    - '  inspect ftp '
+    - '  inspect h323 h225 '
+    - '  inspect h323 ras '
+    - '  inspect rsh '
+    - '  inspect esmtp '
+    - '  inspect sqlnet '
+    - '  inspect sip  '
+    - '  inspect skinny '
+    - policy-map type inspect dns migrated_dns_map_2
+    - ' parameters'
+    - '  message-length maximum client auto'
+    - '  message-length maximum 512'
+    - '  no tcp-inspection'
+    - policy-map type inspect dns migrated_dns_map_1
+    - ' parameters'
+    - '  message-length maximum client auto'
+    - '  message-length maximum 512'
+    - '  no tcp-inspection'
+    - '!'
+    - service-policy global_policy global
+    - 'prompt hostname context '
+    - no call-home reporting anonymous
+    - call-home
+    - ' profile License'
+    - '  destination address http https://tools.cisco.com/its/service/oddce/services/DDCEService'
+    - '  destination transport-method http'
+    - ' profile CiscoTAC-1'
+    - '  no active'
+    - '  destination address http https://tools.cisco.com/its/service/oddce/services/DDCEService'
+    - '  destination address email callhome@cisco.com'
+    - '  destination transport-method http'
+    - '  subscribe-to-alert-group diagnostic'
+    - '  subscribe-to-alert-group environment'
+    - '  subscribe-to-alert-group inventory periodic monthly'
+    - '  subscribe-to-alert-group configuration periodic monthly'
+    - '  subscribe-to-alert-group telemetry periodic daily'
+    - Cryptochecksum:323092cb6e9e93843b8d8af5a1cfdccc
+------------------------------------------------------------------------------
+# show reload:
+-   - No reload is scheduled.
+------------------------------------------------------------------------------
+# show processes:
+-   - 'Hardware:   ASAv'
+    - Cisco Adaptive Security Appliance Software Version 9.18(4)22
+    - ASLR enabled, text region 55ea7cde4000-55ea80ac1159
+    - ''
+    - '    PC                 SP                 STATE                 Runtime              SBASE       Stack
+        Process TID'
+    - Mwe 0x000055ea7effeef5 0x00007fd9443fce98 0x000055ea859c94c0          0 0x00007fd9443f5030
+        32088/32768 zone_background_idb 141
+    - Mwe 0x000055ea7fe79ff5 0x00007fd9179d2ae8 0x000055ea859c94c0          0 0x00007fd9179cb030
+        30568/32768 webvpn_task 188
+    - Mwe 0x000055ea7e7c11d5 0x00007fd946888e88 0x000055ea859c94c0          0 0x00007fd946881030
+        27128/32768 WebVPN KCD Process 8
+    - Mwe 0x000055ea7e368d85 0x00007fd9460c0eb8 0x000055ea859c94c0          0 0x00007fd9460b9030
+        32104/32768 vtemplate process 162
+    - Msi 0x000055ea7fc9878a 0x00007fd94607ee88 0x000055ea859c94c0         27 0x00007fd946077030
+        31880/32768 vpnlb_timer_thread 133
+    - Mwe 0x000055ea7fc989c7 0x00007fd92fe81eb8 0x000055ea856eeea0          0 0x00007fd92fe7a030
+        31688/32768 vpnlb_thread 99
+    - Msi 0x000055ea7fc7b03a 0x00007fd9443f1e18 0x000055ea859c94c0        143 0x00007fd9443ea030
+        31768/32768 vpnfol_thread_unsent 235
+    - Msi 0x000055ea7fc7ae45 0x00007fd945f52eb8 0x000055ea859c94c0         33 0x00007fd945f4b030
+        31928/32768 vpnfol_thread_timer 233
+    - Mwe 0x000055ea7fc7a9ed 0x00007fd945ee9e38 0x000055ea856eeb80          0 0x00007fd945ee2030
+        32264/32768 vpnfol_thread_sync 234
+    - Mwe 0x000055ea7fc7a5b5 0x00007fd9179b1ea8 0x000055ea856ee930          0 0x00007fd9179a2030
+        65144/65536 vpnfol_thread_msg 232
+    - Mwe 0x000055ea7e40ced8 0x00007fd917b99ea8 0x000055ea859c94c0          0 0x00007fd917b92030
+        32088/32768 VPN director state sync 158
+    - Msi 0x000055ea7fc4bd15 0x00007fd92feb8eb8 0x000055ea859c94c0         15 0x00007fd92feb1030
+        31928/32768 VPN Clustering HA timer thread 165
+    - Mwe 0x000055ea7fc467cd 0x00007fd92fe76eb8 0x000055ea859c94c0          0 0x00007fd92fe6f030
+        32104/32768 VPN Cluster HA msg send thread 166
+    - Mwe 0x000055ea7fc48c15 0x00007fd92fe21eb8 0x000055ea859c94c0          0 0x00007fd92fe1a030
+        32104/32768 VPN Cluster HA msg receive thread 167
+    - Mwe 0x000055ea7fc47575 0x00007fd945f3be88 0x000055ea859c94c0          0 0x00007fd945f34030
+        32256/32768 VPN Cluster HA bulk sync thread 164
+    - Mwe 0x000055ea7fc45d75 0x00007fd9460b5e98 0x000055ea859c94c0          0 0x00007fd9460ae030
+        32272/32768 VPN Cluster HA backup activation thread 163
+    - Mwe 0x000055ea7fcdd845 0x00007fd92fe4abd8 0x000055ea859c94c0          6 0x00007fd92fe43030
+        27080/32768 VM environment thread 104
+    - Mwe 0x000055ea7fa75b10 0x00007fd92e8b6cb8 0x000055ea859c94c0          0 0x00007fd946470030
+        31232/32768 UserFromCert Thread 17
+    - Msi 0x000055ea7f29d41a 0x00007fd9179feef8 0x000055ea859c94c0        451 0x00007fd9179f7030
+        28768/32768 update_cpu_usage 184
+    - Mwe 0x000055ea7da2ad4f 0x00007fd9179e8ea8 0x000055ea859cbf70          0 0x00007fd9179e1030
+        32376/32768 update block depletion 186
+    - Mwe 0x000055ea7f6c341d 0x00007fd9179c7e68 0x000055ea859c94c0          0 0x00007fd9179c0030
+        31640/32768 unique_id_task 189
+    - Mwe 0x000055ea7fa42bda 0x00007fd92ed07e88 0x000055ea856ad9e0          0 0x00007fd92ed00030
+        31928/32768 udp_timer 116
+    - Mwe 0x000055ea7fa43e50 0x00007fd91754ce58 0x000055ea859c94c0        142 0x00007fd917545030
+        32008/32768 udp_thread 200
+    - Lsi 0x000055ea7f27845f 0x00007fd9445e3ee8 0x000055ea859c94c0          1 0x00007fd9445dc030
+        31976/32768 uauth_urlb clean 153
+    - Mwe 0x000055ea7f90a432 0x00007fd944407ea8 0x000055ea8568d050          0 0x00007fd944400030
+        31672/32768 Uauth_Proxy 83
+    - Mwe 0x000055ea7f9a57c2 0x00007fd944412de8 0x00007fd93d081b78          1 0x00007fd94440b030
+        31600/32768 uauth 82
+    - Mwe 0x000055ea7e363075 0x00007fd9460aaeb8 0x000055ea859c94c0          0 0x00007fd9460a3030
+        31576/32768 tunnel_ifc_init 46
+    - Mwe 0x000055ea7defa8f5 0x00007fd91c13bde8 0x000055ea83888f30         14 0x00007fd91c0fc030
+        245968/262144 tmatch compile thread 128
+    - Mwe 0x000055ea7f987532 0x00007fd92fed9e98 0x000055ea859c94c0          0 0x00007fd92fed2030
+        31608/32768 Thread Logger 91
+    - Mwe 0x000055ea7f9b293f 0x00007fd917557d58 0x000055ea85ea6a50          0 0x00007fd917550030
+        32040/32768 tcp_thread 199
+    - Mwe 0x000055ea7f9acfe8 0x00007fd92ed2be88 0x000055ea856a1f10          0 0x00007fd92ed24030
+        31928/32768 tcp_slow 115
+    - Mwe 0x000055ea7f9a9de9 0x00007fd92ed36ea8 0x000055ea856a1f10          0 0x00007fd92ed2f030
+        31960/32768 tcp_fast 114
+    - Mwe 0x000055ea7f997bd7 0x00007fd92fecee88 0x000055ea856a1a90          0 0x00007fd92fec7030
+        30760/32768 syslogd 92
+    - Mwe 0x000055ea7f98b97d 0x00007fd92fee4e58 0x000055ea859c94c0          0 0x00007fd92fedd030
+        32024/32768 Syslog Timer Thread 90
+    - Mwe 0x000055ea7dd49ab5 0x00007fd9463e0e48 0x000055ea859c94c0          2 0x00007fd9463d9030
+        31816/32768 SXP CORE 30
+    - Mwe 0x000055ea7f013e35 0x00007fd92feadcc8 0x000055ea859c94c0          0 0x00007fd92fea6030
+        29896/32768 static 143
+    - Msp 0x000055ea7f97513f 0x00007fd944009ee8 0x000055ea859c94c0          9 0x00007fd944002030
+        31864/32768 SSL 86
+    - Mwe 0x000055ea7f94584d 0x00007fd917993ec8 0x000055ea859c94c0          4 0x00007fd91798c030
+        31816/32768 ssh/timer 223
+    - Mwe 0x000055ea7f9409e5 0x00007fd916941e88 0x000055ea87456770         13 0x00007fd91693a030
+        32344/32768 SSH Ctxt Thread 226
+    - Mwe 0x000055ea7f9b90f4 0x00007fd915f48dc8 0x00007fd93d4db078       2371 0x00007fd915f0a030
+        246136/262144 ssh 299
+    - M*  0x000055ea7f9376f8 0x00007fd92fbc8f28 0x000055ea859c9be0         14 0x00007fd915ec7030
+        249112/262144 ssh 352
+    - Mwe 0x000055ea7f7b38ec 0x00007fd944430ea8 0x000055ea87328340          0 0x00007fd944429030
+        28720/32768 snmp_logging_thread 80
+    - Mwe 0x000055ea7f71427c 0x00007fd9446efe88 0x000055ea873ec970          1 0x00007fd9446e8030
+        31640/32768 SNMP Notify Thread 222
+    - Mwe 0x000055ea7f713265 0x00007fd9460c7a68 0x000055ea859c94c0         32 0x00007fd9460c4030
+        14392/32768 SNMP Host Timer Thread 224
+    - Mwe 0x000055ea7f714798 0x00007fd916c0eea8 0x000055ea8732c380          0 0x00007fd916c07030
+        32376/32768 SNMP ContextThread 225
+    - Mwe 0x000055ea7f999408 0x00007fd92fefae78 0x000055ea856a1b30          0 0x00007fd92fef3030
+        31712/32768 SMTP 88
+    - Mwe 0x000055ea7e82494d 0x00007fd9463a1e48 0x000055ea84be7960          1 0x00007fd94639a030
+        31616/32768 SmartLic IPC Comm 127
+    - Mwe 0x000055ea7e81b309 0x00007fd94664fe58 0x000055ea84be74c0          0 0x00007fd946648030
+        26296/32768 SmartLic IPC 124
+    - Msi 0x000055ea7e814ff2 0x00007fd9464a0ef8 0x000055ea859c94c0          0 0x00007fd946499030
+        31952/32768 sm_lic_sch_comm_thread 125
+    - Mwe 0x000055ea7e814f4d 0x00007fd946422e78 0x000055ea859c94c0          0 0x00007fd94641b030
+        27720/32768 sm_lic_entitlement_thread 126
+    - Mwe 0x000055ea7df1f8bd 0x00007fd94665ad98 0x000055ea8388d820          0 0x00007fd946653030
+        29224/32768 sfr-vpn-status-watcher 123
+    - Mwe 0x000055ea7df21325 0x00007fd946396e98 0x000055ea859c94c0          0 0x00007fd94638f030
+        28392/32768 sfr-vpn-status 36
+    - Mwe 0x000055ea7f6cc465 0x00007fd9179bce58 0x000055ea859c94c0          0 0x00007fd9179b5030
+        31624/32768 sessmgr_redist_task 190
+    - Mwe 0x000055ea7f6a8f0d 0x00007fd944490e38 0x000055ea859c94c0          2 0x00007fd944481030
+        64520/65536 Session Manager 79
+    - Mwe 0x000055ea7f9776df 0x00007fd92ff05e98 0x000055ea859c94c0         20 0x00007fd92fefe030
+        26576/32768 Self-Sign Cert Thread 87
+    - Mwe 0x000055ea7fd1def5 0x00007fd9444259d8 0x000055ea859c94c0          4 0x00007fd944416030
+        63272/65536 sch_module 227
+    - Mwe 0x000055ea7fd05ce5 0x00007fd92fe34e98 0x000055ea859c94c0          6 0x00007fd92fe25030
+        64376/65536 scansafe_poll 106
+    - Mwe 0x000055ea7fd94905 0x00007fd92fdd3ec8 0x000055ea859c94c0          0 0x00007fd92fdcc030
+        31576/32768 SAML Process 109
+    - Mwe 0x000055ea7fa75b10 0x00007fd916d02cb8 0x000055ea859c94c0         37 0x00007fd916e0b030
+        57992/65536 rtcli async executor process 221
+    - Mwe 0x000055ea7e304175 0x00007fd9449cfea8 0x000055ea859c94c0          0 0x00007fd9449c8030
+        32104/32768 REST Periodic 67
+    - Mwe 0x000055ea7da4db15 0x00007fd946495eb8 0x000055ea859c94c0          0 0x00007fd946486030
+        64680/65536 Reload Control Thread 15
+    - Mwe 0x000055ea7dd40dc4 0x00007fd9463d5ea8 0x000055ea859c94c0          1 0x00007fd9463ce030
+        31544/32768 RBM CORE 31
+    - Mwe 0x000055ea7f91fa55 0x00007fd917b1feb8 0x000055ea859c94c0          0 0x00007fd917b18030
+        32120/32768 RADIUS Proxy Time Keeper 170
+    - Mwe 0x000055ea7f8dc1f7 0x00007fd917b2a998 0x00007fd93d25e8c8          0 0x00007fd917b23030
+        30648/32768 RADIUS Proxy Listener 169
+    - Mwe 0x000055ea7f9216f2 0x00007fd917b35ea8 0x000055ea8568e570          0 0x00007fd917b2e030
+        32376/32768 RADIUS Proxy Event Daemon 168
+    - Mwe 0x000055ea7f5d12d5 0x00007fd9444a3ec8 0x000055ea859c94c0          0 0x00007fd944494030
+        64424/65536 Quack process 78
+    - Mwe 0x000055ea7f5ab273 0x00007fd944726ea8 0x000055ea85615490          0 0x00007fd94471f030
+        32376/32768 QoS Support Module 68
+    - Mwe 0x000055ea7fc0e621 0x00007fd94609fe28 0x000055ea856d6560          6 0x00007fd946098030
+        32248/32768 ppp_timer_thread 132
+    - Lwe 0x000055ea7f230f05 0x00007fd917bcde98 0x000055ea859c94c0        112 0x00007fd917bc6030
+        25536/32768 pm_timer_thread 154
+    - Mwe 0x000055ea7f4c469d 0x00007fd91829be68 0x000055ea859c94c0          0 0x00007fd918294030
+        31480/32768 pki_io_thread 147
+    - Mwe 0x000055ea7f4ce015 0x00007fd92fe3fe98 0x000055ea859c94c0          0 0x00007fd92fe38030
+        31016/32768 PKI LINA system call thread 146
+    - Mwe 0x000055ea7f4cea8d 0x00007fd918264ea8 0x000055ea859c94c0          0 0x00007fd91825d030
+        31864/32768 PKI CMP Timer Thread 152
+    - Mwe 0x000055ea7f4d11c5 0x00007fd91826fec8 0x000055ea859c94c0          0 0x00007fd918268030
+        32120/32768 PKI CMP Thread 151
+    - Msi 0x000055ea7f25de89 0x00007fd9449f6e98 0x000055ea859c94c0         45 0x00007fd9449ef030
+        31648/32768 PIX Garbage Collector 65
+    - Msi 0x000055ea7f2937c3 0x00007fd9179f3ee8 0x000055ea859c94c0          0 0x00007fd9179ec030
+        31976/32768 periodic_housekeeping 185
+    - Mwe 0x000055ea7f4a789d 0x00007fd91827aea8 0x000055ea859c94c0          0 0x00007fd918273030
+        31864/32768 Periodic Cert Auth Timer Thread 150
+    - Mwe 0x000055ea7f4a9e55 0x00007fd918285ea8 0x000055ea859c94c0          0 0x00007fd91827e030
+        31864/32768 Periodic Cert Auth Thread 149
+    - Mwe 0x000055ea7f354945 0x00007fd917acdea8 0x000055ea859c94c0          0 0x00007fd917ac6030
+        32104/32768 PBA interim logging timer Thread 171
+    - Mwe 0x000055ea7f9c78b5 0x00007fd9179dde78 0x000055ea859c94c0         35 0x00007fd9179d6030
+        31568/32768 npshim_thread 187
+    - Msi 0x000055ea7f294dba 0x00007fd91799ed58 0x000055ea859c94c0          0 0x00007fd917997030
+        28944/32768 NIC status poll 192
+    - Msi 0x000055ea7e91f503 0x00007fd917988ec8 0x000055ea859c94c0          2 0x00007fd917981030
+        31944/32768 netfs_vnode_reclaim 241
+    - Mwe 0x000055ea7fa75b10 0x00007fd92fa00cb8 0x000055ea859c94c0          0 0x00007fd945f3f030
+        31168/32768 netfs_thread_init 55
+    - Mwe 0x000055ea7e91f630 0x00007fd92f958e98 0x000055ea84bea010          0 0x00007fd92f951030
+        31752/32768 netfs_mount_handler 113
+    - Mwe 0x000055ea7e88b6b5 0x00007fd9174fdea8 0x000055ea859c94c0        264 0x00007fd9174ee030
+        63464/65536 MLD 205
+    - Mwe 0x000055ea7fbf3060 0x00007fd91738aeb8 0x000055ea85ea6870          0 0x00007fd91737b030
+        64872/65536 lu_rx 219
+    - Lwe 0x000055ea7fbf2fc8 0x00007fd917377eb8 0x000055ea874e3720          0 0x00007fd917370030
+        32392/32768 lu_dynamic_sync 220
+    - Mwe 0x000055ea7fbf2e8d 0x00007fd917a09e38 0x000055ea874e3870          3 0x00007fd917a02030
+        31584/32768 lu_ctl 183
+    - Mwe 0x000055ea7f9902cc 0x00007fd92feefe78 0x000055ea856a0a20          0 0x00007fd92fee8030
+        31800/32768 Logger 89
+    - Mwe 0x000055ea7f54a206 0x00007fd9444b9e58 0x000055ea855dc350          0 0x00007fd9444b2030
+        32104/32768 Log Mgr Event Thread 76
+    - Mwe 0x000055ea7f9bdbdc 0x00007fd94755acc8 0x00007fd93d06d958          2 0x00007fd947553030
+        30920/32768 listen/ssh 296
+    - Mwe 0x000055ea7f547b91 0x00007fd946670e98 0x000055ea855dc250          0 0x00007fd946669030
+        32360/32768 lina_ipc_server 10
+    - Mwe 0x000055ea7f5479a1 0x00007fd946665e98 0x000055ea855dc240          0 0x00007fd94665e030
+        32360/32768 lina_ipc_rclient 11
+    - Mwe 0x000055ea7f51aba8 0x00007fd94667be88 0x000055ea855d3fb0          0 0x00007fd946674030
+        30568/32768 lina_inotify_file_monitor_thread 9
+    - Mwe 0x000055ea7f545946 0x00007fd9444aede8 0x000055ea855db560          0 0x00007fd9444a7030
+        31752/32768 lina_hmon_thread 77
+    - Mwe 0x000055ea7f507e8c 0x00007fd94702ae78 0x000055ea85448280          0 0x00007fd947023030
+        31896/32768 lina_cmd_req_thread 118
+    - Mwe 0x000055ea7f50825a 0x00007fd9474c8e78 0x000055ea8237be30          0 0x00007fd9474c1030
+        31896/32768 lina_cmd_local_resp_thread 117
+    - Mwe 0x000055ea7e7d7dea 0x00007fd94640ce48 0x000055ea85fd8950          0 0x00007fd946405030
+        32200/32768 Lic TMR 121
+    - Mwe 0x000055ea7e7d7d37 0x00007fd946094e88 0x000055ea84bde030          4 0x00007fd94608d030
+        32296/32768 Lic HA Cluster 122
+    - Mwe 0x000055ea7fc2dac5 0x00007fd946146e88 0x000055ea859c94c0          0 0x00007fd94613f030
+        32072/32768 L2TP mgmt daemon 131
+    - Mwe 0x000055ea7fc2b2bd 0x00007fd946167e88 0x000055ea859c94c0          0 0x00007fd946160030
+        32072/32768 L2TP data daemon 130
+    - Mwe 0x000055ea7f0f8a45 0x00007fd947c13ed8 0x000055ea859c94c0          0 0x00007fd947c0c030
+        32152/32768 Key chain livekeys 1
+    - Mwe 0x000055ea7e638dd5 0x00007fd91752eec8 0x000055ea859c94c0          0 0x00007fd91751f030
+        64904/65536 IPv6 Route Sync 202
+    - Mwe 0x000055ea7e6331e7 0x00007fd91751be68 0x000055ea859c94c0          0 0x00007fd91750c030
+        61480/65536 IPv6 ND 203
+    - Mwe 0x000055ea7e639158 0x00007fd917541e88 0x000055ea859c94c0          1 0x00007fd917532030
+        64600/65536 IPv6 Input 201
+    - Mwe 0x000055ea7e63870b 0x00007fd917508e98 0x000055ea859c94c0         13 0x00007fd917501030
+        30808/32768 IPv6 IDB 204
+    - Mwe 0x000055ea7dbedefb 0x00007fd946401e58 0x00007fd93c2b87d0          1 0x00007fd9463fa030
+        31592/32768 IPsec message handler 134
+    - Mwe 0x000055ea7e5b965f 0x00007fd917961db8 0x000055ea85ea6a40        217 0x00007fd917952030
+        64392/65536 IP Thread 196
+    - Mwe 0x000055ea7efb2cb5 0x00007fd92fec3e48 0x000055ea859c94c0          0 0x00007fd92febc030
+        29408/32768 IP RIB Update 142
+    - Mwe 0x000055ea7efff06d 0x00007fd9445d8e88 0x000055ea859c94c0          0 0x00007fd9445d1030
+        30120/32768 IP Connected Route Background 140
+    - Mwe 0x000055ea7ee6dbbd 0x00007fd945edee98 0x000055ea859c94c0          0 0x00007fd945ed7030
+        32072/32768 IP Background 139
+    - Mwe 0x000055ea7f225db4 0x00007fd9449daea8 0x000055ea853ece00          0 0x00007fd9449d3030
+        32376/32768 IP Address Assign 66
+    - Mwe 0x000055ea7e4d171d 0x00007fd94613beb8 0x000055ea859c94c0          0 0x00007fd946134030
+        32104/32768 IKEv2 Mgd Timer Thread 161
+    - Mwe 0x000055ea7e4d1386 0x00007fd917b68ea8 0x000055ea859c94c0          0 0x00007fd917b61030
+        32088/32768 IKEv2 EAP Passthrough 160
+    - Mwe 0x000055ea7e5021e0 0x00007fd917b73b18 0x000055ea859c94c0         28 0x00007fd917b6c030
+        30504/32768 IKEv2 Daemon 159
+    - Mwe 0x000055ea7e4496b5 0x00007fd917bb7e88 0x000055ea859c94c0          0 0x00007fd917bb0030
+        32072/32768 IKE Timekeeper 156
+    - Mwe 0x000055ea7e4056c5 0x00007fd946089df8 0x000055ea859c94c0          0 0x00007fd946082030
+        31448/32768 IKE Receiver 49
+    - Mwe 0x000055ea7e438998 0x00007fd917bacb18 0x000055ea84bcec00          0 0x00007fd917b9d030
+        64008/65536 IKE Daemon 157
+    - Mwe 0x000055ea7e401325 0x00007fd917bc2ea8 0x000055ea859c94c0          0 0x00007fd917bbb030
+        31624/32768 IKE Common thread 155
+    - Mwe 0x000055ea7f1809d1 0x00007fd945f12ec8 0x000055ea859c94c0          0 0x00007fd945f03030
+        64904/65536 idfw_service 59
+    - Mwe 0x000055ea7f1740ae 0x00007fd945f25ea8 0x000055ea859c94c0          0 0x00007fd945f16030
+        64552/65536 idfw_proc 58
+    - Mwe 0x000055ea7f186db5 0x00007fd945effe68 0x000055ea859c94c0          0 0x00007fd945ef8030
+        31464/32768 idfw_adagent 60
+    - Mwe 0x000055ea7e31deec 0x00007fd917562da8 0x000055ea85ea68e0          0 0x00007fd91755b030
+        30488/32768 icmp_thread 198
+    - Mwe 0x000055ea7f654ddd 0x00007fd945f30eb8 0x000055ea859c94c0          0 0x00007fd945f29030
+        32120/32768 ICMP event handler 137
+    - Mwe 0x000055ea7e2cc62b 0x00007fd9173a8e88 0x000055ea859c94c0          0 0x00007fd9173a1030
+        32072/32768 ha_trans_data_tx 217
+    - Mwe 0x000055ea7e2cc62b 0x00007fd91742ce88 0x000055ea859c94c0          0 0x00007fd917425030
+        32072/32768 ha_trans_ctl_tx 216
+    - Mwe 0x000055ea7e27a90c 0x00007fd9174d4268 0x000055ea85ce2140          0 0x00007fd9174cd030
+        28536/32768 fover_tx_2 208
+    - Mwe 0x000055ea7e27a90c 0x00007fd9174df268 0x000055ea85ce2130          0 0x00007fd9174d8030
+        28536/32768 fover_tx 207
+    - Msi 0x000055ea7e29b0ca 0x00007fd917a14a58 0x000055ea859c94c0         15 0x00007fd917a0d030
+        29976/32768 fover_thread 182
+    - Mwe 0x000055ea7e280afc 0x00007fd9174eaa38 0x000055ea85cfcfc0          0 0x00007fd9174e3030
+        31240/32768 fover_rx 206
+    - Mwe 0x000055ea7e2ab85c 0x00007fd9174be4c8 0x000055ea85ce2168          0 0x00007fd9174af030
+        61912/65536 fover_rep 210
+    - Mwe 0x000055ea7e295649 0x00007fd9174abaf8 0x000055ea85ce2178         20 0x00007fd91746c030
+        260808/262144 fover_parse 211
+    - Mwe 0x000055ea7e27bb84 0x00007fd9174c9d78 0x000055ea85ea6b20          0 0x00007fd9174c2030
+        32056/32768 fover_ip 209
+    - Mwe 0x000055ea7e253a71 0x00007fd91745de38 0x000055ea85ce3c10          9 0x00007fd917456030
+        32264/32768 fover_ifc_test 213
+    - Mwe 0x000055ea7e25da9c 0x00007fd91743d748 0x000055ea859c94c0          0 0x00007fd917430030
+        54312/65536 fover_health_monitoring_thread 215
+    - Mwe 0x000055ea7e25671c 0x00007fd917452ec8 0x000055ea859c94c0          0 0x00007fd917443030
+        64488/65536 fover_hb_thread 214
+    - Mwe 0x000055ea7e2bb365 0x00007fd91739dec8 0x000055ea859c94c0          0 0x00007fd91738e030
+        52952/65536 fover_FSM_thread 218
+    - Mwe 0x000055ea7e2594ad 0x00007fd917468ec8 0x000055ea859c94c0          0 0x00007fd917461030
+        32136/32768 fover_fail_check 212
+    - Mwe 0x000055ea7e2e0495 0x00007fd94701fe98 0x000055ea859c94c0          0 0x00007fd947018030
+        32088/32768 Failover Smart License control thread 6
+    - Mwe 0x000055ea7fd4eced 0x00007fd92fe16ae8 0x000055ea859c94c0          0 0x00007fd92fdd7030
+        260088/262144 event manager 108
+    - Mwe 0x000055ea7e8275f5 0x00007fd92fa29ea8 0x000055ea859c94c0          0 0x00007fd92fa22030
+        32088/32768 entitlement request/response processing 111
+    - Msi 0x000055ea7f6dfdaa 0x00007fd92f9b8ed8 0x000055ea859c94c0         18 0x00007fd92f9b1030
+        31960/32768 emweb/cifs_timer 112
+    - Mwe 0x000055ea7fbd8515 0x00007fd945ef4ec8 0x000055ea859c94c0          0 0x00007fd945eed030
+        32136/32768 Dynamic Filter VC Housekeeper 138
+    - Mwe 0x000055ea7fbeaf85 0x00007fd944710e98 0x000055ea859c94c0          0 0x00007fd944709030
+        32272/32768 Dynamic Filter cli handler 70
+    - Msi 0x000055ea7dfcc11a 0x00007fd9163bee18 0x000055ea859c94c0         51 0x00007fd9163b7030
+        31768/32768 DHCPRA Monitor 238
+    - Mwe 0x000055ea7dfa3574 0x00007fd946151ec8 0x000055ea859c94c0          0 0x00007fd94614a030
+        32136/32768 DHCPD Timer 237
+    - Mwe 0x000055ea7fa42d73 0x00007fd916055da8 0x00007fd92ed21d20          0 0x00007fd916046030
+        59592/65536 DHCPC Receiver 240
+    - Msi 0x000055ea7dfcd955 0x00007fd9446faeb8 0x000055ea859c94c0         22 0x00007fd9446f3030
+        30264/32768 DHCP Network Scope Monitor 72
+    - Mwe 0x000055ea7dfbc46d 0x00007fd9163b3e98 0x000055ea859c94c0          0 0x00007fd9163ac030
+        31208/32768 DHCP Client 239
+    - Lwe 0x000055ea7df4ee00 0x00007fd94615ce08 0x000055ea85ba20e0          0 0x00007fd946155030
+        31688/32768 dbgtrace 38
+    - Mwe 0x000055ea7dd398d5 0x00007fd9463b7ed8 0x000055ea859c94c0          1 0x00007fd9463b0030
+        31960/32768 cts_timer_task 33
+    - Mwe 0x000055ea7dd36f1c 0x00007fd9463cacc8 0x000055ea85b38ff0          1 0x00007fd9463bb030
+        64248/65536 cts_task 32
+    - Msi 0x000055ea7dc0b31a 0x00007fd9463f6c38 0x000055ea859c94c0        615 0x00007fd9463ef030
+        31288/32768 CTM message handler 135
+    - Mwe 0x000055ea7dbfd565 0x00007fd9463ebe98 0x000055ea859c94c0          0 0x00007fd9463e4030
+        32088/32768 CTM Daemon 29
+    - Mwe 0x000055ea7db7fda5 0x00007fd9463acec8 0x000055ea859c94c0          0 0x00007fd9463a5030
+        32136/32768 CTCP Timer process 129
+    - Mwe 0x000055ea7f4586e4 0x00007fd918290e98 0x000055ea859c94c0          0 0x00007fd918289030
+        32072/32768 Crypto PKI RECV 148
+    - Mwe 0x000055ea7f459cf6 0x00007fd92fea2ea8 0x000055ea859c94c0          0 0x00007fd92fe9b030
+        31864/32768 Crypto CA 144
+    - Mrd 0x000055ea7e08464f 0x00007fd917a6de98 0x000055ea859c9be0          0 0x00007fd917a66030
+        32296/32768 CP Threat-Detection Processing 179
+    - Mrd 0x000055ea7e08432e 0x00007fd917ac2ae8 0x000055ea859c9be0         99 0x00007fd917abb030
+        31104/32768 CP Processing 172
+    - Mrd 0x000055ea7e084127 0x00007fd917ab7e88 0x000055ea859c9be0         37 0x00007fd917aa8030
+        64216/65536 CP Midpath Processing 173
+    - Mrd 0x000055ea7e083bc7 0x00007fd917aa4e98 0x000055ea859c9be0          0 0x00007fd917a9d030
+        32296/32768 CP HA Processing 174
+    - Mrd 0x000055ea7e083bc7 0x00007fd917a99e98 0x000055ea859c9be0          0 0x00007fd917a92030
+        32296/32768 CP HA Ctl Processing 175
+    - Mrd 0x000055ea7e08482f 0x00007fd917a78e98 0x000055ea859c9be0          0 0x00007fd917a71030
+        32296/32768 CP DP SFR Event Processing 178
+    - Mrd 0x000055ea7e08473f 0x00007fd917a83e98 0x000055ea859c9be0          0 0x00007fd917a7c030
+        30176/32768 CP DP CXSC Event Processing 177
+    - Mrd 0x000055ea7e084567 0x00007fd917a8ee98 0x000055ea859c9be0          0 0x00007fd917a87030
+        32272/32768 CP ARP Processing 176
+    - Mwe 0x000055ea7db64fcf 0x00007fd946417e88 0x000055ea8380f8a0          0 0x00007fd946410030
+        31752/32768 Config History Thread 25
+    - Mwe 0x000055ea7dae5265 0x00007fd946438eb8 0x000055ea859c94c0          0 0x00007fd946431030
+        32120/32768 CMGR Timer Process 22
+    - Mwe 0x000055ea7dae5ecc 0x00007fd94644be98 0x000055ea859d3870          0 0x00007fd94643c030
+        64904/65536 CMGR Server Process 21
+    - Mwe 0x000055ea7dd96635 0x00007fd946130ea8 0x000055ea859c94c0          0 0x00007fd946129030
+        31896/32768 cluster interface health monitor 42
+    - Mrd 0x000055ea7e0844e3 0x00007fd917a62b08 0x000055ea859c9be0          0 0x00007fd917a5b030
+        31384/32768 Cluster event-queue processing thread 180
+    - Mwe 0x000055ea7f312b14 0x00007fd94471bea8 0x000055ea853f1d00          0 0x00007fd944714030
+        32376/32768 Client Update Task 69
+    - Mwe 0x000055ea7df97d31 0x00007fd917a57418 0x000055ea81f65c48       1342 0x00007fd917a18030
+        247064/262144 ci/console 181
+    - Mwe 0x000055ea804827b5 0x00007fd945ed3e48 0x000055ea859c94c0          0 0x00007fd945ecc030
+        31992/32768 Chunk Manager 64
+    - Lwe 0x000055ea805b0ed5 0x00007fd944705ea8 0x000055ea859c94c0          4 0x00007fd9446fe030
+        31784/32768 Checkheaps 71
+    - Mwe 0x000055ea7f49793a 0x00007fd92fe55ea8 0x000055ea859c94c0          0 0x00007fd92fe4e030
+        31544/32768 CERT API 145
+    - Lwe 0x000055ea7da35518 0x00007fd947ad4eb8 0x000055ea859c9380          0 0x00007fd947acd030
+        31720/32768 block_diag 2
+    - Mwe 0x000055ea7dab5ec5 0x00007fd946456e88 0x000055ea859c94c0          0 0x00007fd94644f030
+        32072/32768 Attribute Manager Thread 20
+    - Msi 0x000055ea7e5c1301 0x00007fd947014eb8 0x000055ea859c94c0        127 0x00007fd94700d030
+        31512/32768 arp_timer 119
+    - Mwe 0x000055ea7e5cf29f 0x00007fd94642de08 0x000055ea85ea69c0          0 0x00007fd946426030
+        32216/32768 arp_forward_thread 120
+    - Mwe 0x000055ea7e5c4586 0x00007fd91794ee88 0x000055ea85ea7b60          3 0x00007fd917947030
+        30552/32768 ARP Thread 197
+    - Mwe 0x000055ea7da70fc5 0x00007fd92fbc2e28 0x000055ea859c94c0          0 0x00007fd92fbbb030
+        31416/32768 aggregate_auth_task 110
+    - Mwe 0x000055ea7fa75b10 0x00007fd92dee1cb8 0x000055ea859c94c0          1 0x00007fd946465030
+        30288/32768 aaa_shim_thread 18
+    - Mwe 0x000055ea7f9a57c2 0x00007fd946461988 0x00007fd93d081bb8          0 0x00007fd94645a030
+        30952/32768 aaa-url-redirect-task 19
+    - Mwe 0x000055ea7da8246c 0x00007fd946482ae8 0x000055ea859cc3f0        213 0x00007fd94647b030
+        26832/32768 aaa 16
+    - ' -                   -                  -                  -       2671                  -      -      PTHREAD-1387'
+    - ' -                   -                  -                  -   11648428                  -      -      scheduler'
+    - ' -                   -                  -                  -   11678937                  -      -      total
+        elapsed'
+------------------------------------------------------------------------------
+# show kernel process detail:
+-   - ''
+------------------------------------------------------------------------------
+# show kernel ifconfig:
+-   - 'ccl_ha_tap_nlp Link encap:Ethernet  HWaddr ce:35:22:f3:5e:d3  '
+    - '          UP BROADCAST MULTICAST  MTU:1300  Metric:1'
+    - '          RX packets:0 errors:0 dropped:0 overruns:0 frame:0'
+    - '          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0'
+    - '          collisions:0 txqueuelen:1000 '
+    - '          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)'
+    - ''
+    - 'ctl_ha_tap_nlp Link encap:Ethernet  HWaddr 0e:36:0f:0e:e2:80  '
+    - '          UP BROADCAST MULTICAST  MTU:1300  Metric:1'
+    - '          RX packets:0 errors:0 dropped:0 overruns:0 frame:0'
+    - '          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0'
+    - '          collisions:0 txqueuelen:1000 '
+    - '          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)'
+    - ''
+    - 'lo        Link encap:Local Loopback  '
+    - '          inet addr:127.0.0.1  Mask:255.0.0.0'
+    - '          inet6 addr: ::1/128 Scope:Host'
+    - '          UP LOOPBACK RUNNING  MTU:65536  Metric:1'
+    - '          RX packets:11 errors:0 dropped:0 overruns:0 frame:0'
+    - '          TX packets:11 errors:0 dropped:0 overruns:0 carrier:0'
+    - '          collisions:0 txqueuelen:1000 '
+    - '          RX bytes:764 (764.0 B)  TX bytes:764 (764.0 B)'
+    - ''
+    - 'tap0      Link encap:Ethernet  HWaddr 92:fc:83:44:b4:c6  '
+    - '          inet addr:127.0.2.2  Bcast:127.0.2.255  Mask:255.255.255.0'
+    - '          UP BROADCAST MULTICAST  MTU:1500  Metric:1'
+    - '          RX packets:0 errors:0 dropped:0 overruns:0 frame:0'
+    - '          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0'
+    - '          collisions:0 txqueuelen:1000 '
+    - '          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)'
+    - ''
+    - 'tap_nlp   Link encap:Ethernet  HWaddr 9a:f2:ab:b7:21:eb  '
+    - '          inet6 addr: fe80::98f2:abff:feb7:21eb/64 Scope:Link'
+    - '          inet6 addr: fd00:0:0:1::2/64 Scope:Global'
+    - '          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1'
+    - '          RX packets:5 errors:0 dropped:0 overruns:0 frame:0'
+    - '          TX packets:19 errors:0 dropped:0 overruns:0 carrier:0'
+    - '          collisions:0 txqueuelen:1000 '
+    - '          RX bytes:386 (386.0 B)  TX bytes:1542 (1.5 KiB)'
+    - ''
+    - 'tap_nlp:1 Link encap:Ethernet  HWaddr 9a:f2:ab:b7:21:eb  '
+    - '          inet addr:169.254.1.2  Bcast:169.254.1.7  Mask:255.255.255.248'
+    - '          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1'
+------------------------------------------------------------------------------
+# show kernel module:
+-   - Module                  Size  Used by
+    - igb_uio                16384  10
+    - dm_crypt               32768  1
+    - dm_mod                102400  3 dm_crypt
+    - ena                    90112  0
+    - ide_cd_mod             36864  1
+    - cdrom                  32768  1 ide_cd_mod
+    - ide_pci_generic        16384  0
+    - vmxnet3                53248  0
+    - piix                   16384  1
+    - ide_core               90112  3 ide_cd_mod,piix,ide_pci_generic
+------------------------------------------------------------------------------
+# show logging:
+-   - 'Syslog logging: disabled'
+    - '    Facility: 20'
+    - '    Timestamp logging: disabled'
+    - '    Hide Username logging: enabled'
+    - '    Standby logging: disabled'
+    - '    Debug-trace logging: disabled'
+    - '    Console logging: disabled'
+    - '    Monitor logging: disabled'
+    - '    Buffer logging: disabled'
+    - '    Trap logging: disabled'
+    - '    Permit-hostdown logging: disabled'
+    - '    History logging: disabled'
+    - '    Device ID: disabled'
+    - '    Mail logging: disabled'
+    - '    ASDM logging: disabled'
+------------------------------------------------------------------------------
+# show route:
+-   - 'Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP'
+    - '       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area '
+    - '       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2'
+    - '       E1 - OSPF external type 1, E2 - OSPF external type 2, V - VPN'
+    - '       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2'
+    - '       ia - IS-IS inter area, * - candidate default, U - per-user static route'
+    - '       o - ODR, P - periodic downloaded static route, + - replicated route'
+    - '       SI - Static InterVRF, BI - BGP InterVRF'
+    - Gateway of last resort is 192.168.101.1 to network 0.0.0.0
+    - ''
+    - S*       0.0.0.0 0.0.0.0 [1/0] via 192.168.101.1, mgmt
+    - C        192.168.101.0 255.255.255.0 is directly connected, mgmt
+    - L        192.168.101.122 255.255.255.255 is directly connected, mgmt
+------------------------------------------------------------------------------
+# show eigrp neighbor:
+-   - ''
+------------------------------------------------------------------------------
+# show ospf neighbor:
+-   - ''
+------------------------------------------------------------------------------
+# show bgp summary:
+-   - '% BGP not active'
+------------------------------------------------------------------------------
+# show arp:
+-   - mgmt 192.168.101.1 1ae8.29c3.7e3c 3673
+    - "\tmgmt 192.168.101.114 1c1b.0d0a.7f72 4198"
+------------------------------------------------------------------------------
+# show ip address:
+-   - 'System IP Addresses:'
+    - 'Interface                Name                   IP address      Subnet mask     Method '
+    - 'Management0/0            mgmt                   192.168.101.122 255.255.255.0   DHCP  '
+    - 'Current IP Addresses:'
+    - 'Interface                Name                   IP address      Subnet mask     Method '
+    - Management0/0            mgmt                   192.168.101.122 255.255.255.0   DHCP
+------------------------------------------------------------------------------
+# show interface ip brief:
+-   - Interface                  IP-Address      OK? Method Status                Protocol
+    - 'GigabitEthernet0/0         unassigned      YES unset  administratively down
+        up  '
+    - 'GigabitEthernet0/1         unassigned      YES unset  administratively down
+        up  '
+    - 'GigabitEthernet0/2         unassigned      YES unset  administratively down
+        up  '
+    - 'GigabitEthernet0/3         unassigned      YES unset  administratively down
+        up  '
+    - 'GigabitEthernet0/4         unassigned      YES unset  administratively down
+        up  '
+    - 'GigabitEthernet0/5         unassigned      YES unset  administratively down
+        up  '
+    - 'GigabitEthernet0/6         unassigned      YES unset  administratively down
+        up  '
+    - 'GigabitEthernet0/7         unassigned      YES unset  administratively down
+        up  '
+    - 'GigabitEthernet0/8         unassigned      YES unset  administratively down
+        up  '
+    - 'Internal-Data0/0           169.254.1.1     YES unset  up                    up  '
+    - Management0/0              192.168.101.122 YES DHCP   up                    up
+------------------------------------------------------------------------------
+# show nat detail:
+-   - ''
+------------------------------------------------------------------------------
+# show snmp-server user:
+-   - ''
+------------------------------------------------------------------------------
+# show snmp-server group:
+-   - ''
+------------------------------------------------------------------------------
+# show ipv6 interface brief:
+-   - GigabitEthernet0/0 [administratively down/down]
+    - '    unassigned'
+    - GigabitEthernet0/1 [administratively down/down]
+    - '    unassigned'
+    - GigabitEthernet0/2 [administratively down/down]
+    - '    unassigned'
+    - GigabitEthernet0/3 [administratively down/down]
+    - '    unassigned'
+    - GigabitEthernet0/4 [administratively down/down]
+    - '    unassigned'
+    - GigabitEthernet0/5 [administratively down/down]
+    - '    unassigned'
+    - GigabitEthernet0/6 [administratively down/down]
+    - '    unassigned'
+    - GigabitEthernet0/7 [administratively down/down]
+    - '    unassigned'
+    - GigabitEthernet0/8 [administratively down/down]
+    - '    unassigned'
+    - mgmt [up/up]
+    - '    unassigned'
+------------------------------------------------------------------------------
+# show ipv6 route:
+-   - 'Codes: C - Connected, L - Local, S - Static, SI - Static InterVRF'
+    - '       O - OSPF intra, OI - OSPF inter, OE1 - OSPF ext 1, OE2 - OSPF ext 2'
+    - "\t    ON1 - OSPF NSSA ext 1, ON2 - OSPF NSSA ext 2, B - BGP, BI - BGP InterVRF"
+    - "\t    V - VPN, I1 - ISIS L1, I2 - ISIS L2, IA - ISIS interarea, IS - ISIS summary"
+    - ''
+    - IPv6 Routing Table - 0 entries
+------------------------------------------------------------------------------
+# show conn all:
+-   - 2 in use, 4 most used
+    - ''
+    - 'TCP mgmt  192.168.101.114:61430 NP Identity Ifc  192.168.101.122:22, idle 0:06:51,
+        bytes 33643, flags UOB '
+    - TCP mgmt  192.168.101.114:61794 NP Identity Ifc  192.168.101.122:22, idle 0:00:00,
+        bytes 79367, flags UOB
+------------------------------------------------------------------------------
+# show xlate:
+-   - 0 in use, 0 most used
+------------------------------------------------------------------------------
+# show aaa login-history:
+-   - "Login history for user:   \t\t\t    admin"
+    - "Logins in last   1 days:   \t\t\t    23"
+    - "Last successful login:     \t\t\t    13:26:06 UTC Apr 27 2024 from 192.168.101.114"
+    - "Failures since last login: \t\t\t    0"
+    - "Last failed login:         \t\t\t    None"
+    - "Privilege level:           \t                    15"
+    - ''
+    - "Login history for user:   \t\t\t    enable_1"
+    - "Logins in last   1 days:   \t\t\t    1"
+    - "Last successful login:     \t\t\t    10:12:48 UTC Apr 27 2024 from console"
+    - "Failures since last login: \t\t\t    0"
+    - "Last failed login:         \t\t\t    None"
+    - "Privilege level:         \t                    Unprivileged"
+------------------------------------------------------------------------------
+# show software authenticity file:
+Command is NOT supported on device
+------------------------------------------------------------------------------
+# show software authenticity running:
+-   - 'Image type                    : Release'
+    - '    Signer Information'
+    - '        Common Name           : abraxas'
+    - '        Organization Unit     : ASAv'
+    - '        Organization Name     : CiscoSystems'
+    - '    Certificate Serial Number : 65E212EE'
+    - '    Hash Algorithm            : SHA2 512'
+    - '    Signature Algorithm       : 2048-bit RSA'
+    - '    Key Version               : A'
+------------------------------------------------------------------------------
+# show software authenticity keys:
+-   - 'Public Key #1 Information'
+    - '--------------------------'
+    - 'Key Type              : Release (Primary)'
+    - 'Public Key Algorithm  : 2048-bit RSA'
+    - 'Modulus :'
+    - "\tD3:C5:BA:F3:E8:B0:83:C3:F4:FA:7B:B0:2B:7D:7A:95:"
+    - "\t48:E0:94:87:A0:27:9D:99:32:81:80:D7:18:D5:EC:0C:"
+    - "\tA0:78:6E:7F:DD:8B:2D:42:D2:0E:0A:A8:30:37:19:D6:"
+    - "\t18:C1:D1:40:CE:43:87:05:43:02:58:D2:F3:39:A0:72:"
+    - "\tF8:0D:CC:38:DA:A4:6D:0B:98:16:E4:FB:47:03:D8:48:"
+    - "\tB6:52:E1:DA:D2:F1:09:ED:94:D9:D4:A4:89:70:56:75:"
+    - "\t46:94:7A:E8:CD:22:3F:7C:21:3E:66:BE:65:1E:61:F8:"
+    - "\t68:42:B8:29:0E:84:30:3F:96:B5:FF:D0:5B:D9:CA:66:"
+    - "\t5E:16:BB:69:46:76:74:69:69:3A:6A:CB:1D:5B:66:72:"
+    - "\t5D:EC:66:C3:8D:02:C9:8D:AC:5C:30:28:F6:2D:80:EA:"
+    - "\t9F:3A:1C:60:31:4A:D0:AB:A3:CA:C9:35:07:8B:30:F7:"
+    - "\t60:83:BF:A3:26:B1:8E:37:01:A5:50:7B:B2:7A:13:01:"
+    - "\t64:36:35:CB:C4:AB:8C:8E:1D:62:D3:26:43:A9:47:D8:"
+    - "\tB3:6B:A7:B1:BD:79:0C:E3:CF:69:F7:55:5E:EB:6E:7C:"
+    - "\t59:47:CF:DB:F5:41:95:4A:50:72:BF:97:39:AA:41:C2:"
+    - "\t2E:B5:01:00:EA:33:1D:96:1C:DC:BC:41:87:08:44:2D"
+    - 'Exponent              : 65537'
+    - 'Key Version           : A'
+    - 'Public Key #2 Information'
+    - '--------------------------'
+    - 'Key Type              : Development (Primary)'
+    - 'Public Key Algorithm  : 2048-bit RSA'
+    - 'Modulus :'
+    - "\tF2:78:C6:63:9E:08:D6:16:EC:D4:E2:7D:B7:44:14:3B:"
+    - "\t5A:16:BE:57:AC:48:67:3F:A5:7A:79:E9:2C:36:52:A9:"
+    - "\t8E:F5:7B:32:DF:65:11:85:A9:87:ED:EE:9D:1D:8D:20:"
+    - "\t9F:D2:29:E8:1C:A5:D5:93:40:05:62:AD:24:03:75:B5:"
+    - "\t46:84:80:3D:ED:93:C5:E0:B9:77:76:52:6D:6C:2C:CB:"
+    - "\tD4:08:86:7D:CF:98:97:0C:F1:8F:C7:6C:6C:E9:83:DD:"
+    - "\t22:80:46:79:DA:22:9D:9C:F7:33:5B:14:D1:20:14:8C:"
+    - "\tF3:A5:8B:A3:78:77:FE:28:3D:28:5D:67:6A:D6:05:64:"
+    - "\t89:E7:B3:73:57:05:10:93:85:CF:8D:1E:45:C3:B9:C7:"
+    - "\t45:30:A6:48:57:46:6C:A7:38:AB:42:2A:4A:50:BA:33:"
+    - "\tC1:40:77:8A:53:FE:56:27:8B:8A:0D:B3:E1:AC:9A:A4:"
+    - "\t04:FD:CA:82:9B:8A:36:FA:F6:45:FB:CE:61:A2:E6:76:"
+    - "\t3B:A9:9D:80:5E:8F:91:79:30:5C:18:1E:5D:E2:79:A7:"
+    - "\tE1:8F:72:D2:90:60:B5:6B:DF:99:6A:A3:E1:75:33:85:"
+    - "\t2A:D3:58:86:5E:24:76:21:22:E5:EC:ED:20:CA:BB:DC:"
+    - "\t69:7B:53:B1:2C:B3:D2:5D:37:4E:E4:1E:CB:C9:EC:03"
+    - 'Exponent              : 65537'
+    - 'Key Version           : A'
+------------------------------------------------------------------------------
+# verify /sha-512 boot:/asa9184-22-smp-k8.bin:
+verify /SHA-512 (boot:/asa9184-22-smp-k8.bin) = 500eae0ad008db7c5ceeb056e80e4a836859f98f7bff8c47e8876975a4132b0121bdb25abba9774cc0d30f79d7571f615af31a1b606c629fcf83f09619220b6c']]
+------------------------------------------------------------------------------
+# verify /md5 boot:/asa9184-22-smp-k8.bin:
+verify /MD5 (boot:/asa9184-22-smp-k8.bin) = f98f98410991996c19c52431243608d9']]
+------------------------------------------------------------------------------
+# show version | inc Version:
+-   - 'Cisco Adaptive Security Appliance Software Version 9.18(4)22 '
+    - SSP Operating System Version 2.12(1.73)
+    - Device Manager Version 7.19(1)95
+------------------------------------------------------------------------------
+# verify /sha-512 system:memory/text:
+verify /SHA-512 (system:memory/text) = 8770d7980c3f4e65570c39671238cfba9956bb2316a0d829e95368718bc04aa6ec67cf92d01f64b2feef872e794339639b73d329dd5722b9545d90eeea5638ea']]
+------------------------------------------------------------------------------
+# verify /md5 system:memory/text:
+verify /MD5 (system:memory/text) = 4eb3eb42fed2505408b60e2ce678f426']]
+------------------------------------------------------------------------------
+# show run | begin webvpn:
+-   - ''
+------------------------------------------------------------------------------
+# show import webvpn plug-in detail:
+-   - ''
+------------------------------------------------------------------------------
+# show memory region | include lina:
+-   - 55ea7cde4000-55ea7da1a000 r--p 00000000 00:02 12605                      /asa/bin/lina
+    - 55ea7da1a000-55ea80ac2000 r-xp 00c36000 00:02 12605                      /asa/bin/lina
+    - 55ea80ac2000-55ea81b01000 r--p 03cde000 00:02 12605                      /asa/bin/lina
+    - 55ea81b01000-55ea81d3c000 r--p 04d1c000 00:02 12605                      /asa/bin/lina
+    - 55ea81d3c000-55ea82caf000 rw-p 04f57000 00:02 12605                      /asa/bin/lina
+------------------------------------------------------------------------------

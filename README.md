@@ -1,8 +1,9 @@
 ## Ansible Playbook for Cisco ASA Forensic Investigation Procedures for First Responders
 
 Automation for the [Cisco ASA Forensic Investigation Procedures for First Responders](https://sec.cloudapps.cisco.com/security/center/resources/forensic_guides/asa_forensic_investigation.html).
+- The ```show tech-support detail``` command errors despite returning results. The task for this command is disabled.
 - "ASA Core File Generation" and "ROMMON Settings Check" are not implemented since these are disruptive.
-- "Step Four – Verify Digitally Signed Image Authenticity" is also not implemented due to lack of HW / SW capabilities to assess against.
+- ~~"Step Four – Verify Digitally Signed Image Authenticity" is also not implemented due to lack of HW / SW capabilities to assess against.~~. This is implemented.
 - FTDs have different Forensic Investigation Procedures for First Responders depending on series. These may be automated later.
   1. [Cisco Firepower Threat Defense Forensic Investigation Procedures for First Responders](https://sec.cloudapps.cisco.com/security/center/resources/forensic_guides/ftd_forensic_investigation.html).
   2. [Cisco Firepower 1000 Series Forensic Data Collection Procedures](https://sec.cloudapps.cisco.com/security/center/resources/forensic_guides/firepower1000_forensic_investigation.html).

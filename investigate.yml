@@ -48,6 +48,9 @@
       verify_md5_cmd: 'verify /md5'
     step_four_cmd:
       not_implemented: 'No capability to assess - SW/HW limitation'
+      show_software_authenticity_file_cmd: show software authenticity file
+      show_software_authenticity_running_cmd: show software authenticity running
+      show_software_authenticity_keys_cmd: show software authenticity keys
     step_five_cmd:
       show_version_cmd: 'show version | inc Version'
       verify_memory_sha512_cmd: 'verify /sha-512 system:memory/text'
@@ -84,13 +87,7 @@
           - "{{ step_two_cmd.dir_recursive_cache_cmd }}"
       register: asa_dir_recursive_cache
       ignore_errors: true
-
-    - name: Step Five - ASA Memory Dump and Core File Generation - Get the ASA version
-      cisco.asa.asa_command:
-        commands:
-          - "{{ step_five_cmd.show_version_cmd }}"
-      register: asa_version
-      ignore_errors: true
+      failed_when: "'FAILED' in asa_dir_recursive_cache"
 
     - name: Step Two - Document the ASA Runtime Environment - show history
       cisco.asa.asa_command:
@@ -293,7 +290,7 @@
 
     - name: Step Three - ASA Image File Hash Verification - Set fact for ASA image path
       ansible.builtin.set_fact:
-         asa_image_path: "{{ asa_version_image.stdout_lines | regex_search(step_three_cmd.asa_disk_image_path_pattern) }}"
+        asa_image_path: "{{ asa_version_image.stdout_lines | regex_search(step_three_cmd.asa_disk_image_path_pattern) }}"
 
     - name: Step Three - ASA Image File Hash Verification - verify /sha-512
       cisco.asa.asa_command:
@@ -307,6 +304,28 @@
         commands:
           - "{{ step_three_cmd.verify_md5_cmd }} {{ asa_image_path }}"
       register: asa_image_verify_md5
+      ignore_errors: true
+
+    - name: Step Four - Verify Digitally Signed Image Authenticity - show software authenticity file
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_four_cmd.show_software_authenticity_file_cmd }}"
+      register: asa_software_authenticity_file
+      ignore_errors: true
+      failed_when: "'FAILED' in asa_dir_recursive_cache"
+
+    - name: Step Four - Verify Digitally Signed Image Authenticity - show software authenticity running
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_four_cmd.show_software_authenticity_running_cmd }}"
+      register: asa_software_authenticity_running
+      ignore_errors: true
+
+    - name: Step Four - Verify Digitally Signed Image Authenticity - show software authenticity keys
+      cisco.asa.asa_command:
+        commands:
+          - "{{ step_four_cmd.show_software_authenticity_keys_cmd }}"
+      register: asa_software_authenticity_keys
       ignore_errors: true
 
     - name: Step Five - ASA Memory Dump and Core File Generation - Get the ASA version
@@ -353,20 +372,20 @@
       when: execute_optional_cmds | bool
 
     - name: Write results to local file
-      blockinfile:
+      ansible.builtin.blockinfile:
         block: "{{ item.cmd }}{{ item.output | to_nice_yaml }}"
-        dest: "{{ inventory_hostname }}.txt"
+        dest: "./{{ inventory_hostname }}.txt"
         create: true
         state: present
         insertafter: EOF
-        append_newline: true
-        prepend_newline: true
+        # append_newline: true
+        # prepend_newline: true
         marker: "------------------------------------------------------------------------------"
       loop:
         - { cmd: "Step One - ASA Device Problem Description\n", output: "{{ step_one.problem_description }}" }
 #        - { cmd: "# {{ step_two_cmd.show_tech_support_cmd }}:\n", output: "{{ asa_tech_support.stdout_lines }}" }
         - { cmd: "# {{ step_two_cmd.dir_recursive_all_filesystems_cmd }}:\n", output: "{{ asa_dir_recursive_all_filesystems.stdout_lines }}" }
-        - { cmd: "# {{ step_two_cmd.dir_recursive_cache_cmd }}:\n", output: "{{ asa_dir_recursive_cache.stdout_lines }}" }
+        - { cmd: "# {{ step_two_cmd.dir_recursive_cache_cmd }}:\n", output: "{{ asa_dir_recursive_cache.stdout_lines | default('Command is NOT supported on device') }}" }
         - { cmd: "# {{ step_two_cmd.show_history_cmd }}:\n", output: "{{ asa_history.stdout_lines }}" }
         - { cmd: "# {{ step_two_cmd.show_clock_detail_cmd }}:\n", output: "{{ asa_clock_detail.stdout_lines }}" }
         - { cmd: "# {{ step_two_cmd.show_startup_config_cmd }}:\n", output: "{{ asa_startup_config.stdout_lines }}" }
@@ -391,6 +410,9 @@
         - { cmd: "# {{ step_two_cmd.show_conn_all_cmd }}:\n", output: "{{ asa_conn_all.stdout_lines }}" }
         - { cmd: "# {{ step_two_cmd.show_xlate_cmd }}:\n", output: "{{ asa_xlate.stdout_lines }}" }
         - { cmd: "# {{ step_two_cmd.show_aaa_login_history_cmd }}:\n", output: "{{ asa_aaa_login_history.stdout_lines }}" }
+        - { cmd: "# {{ step_four_cmd.show_software_authenticity_file_cmd }}:\n", output: "{{ asa_software_authenticity_file.stdout_lines | default('Command is NOT supported on device') }}" }
+        - { cmd: "# {{ step_four_cmd.show_software_authenticity_running_cmd }}:\n", output: "{{ asa_software_authenticity_running.stdout_lines | default('Command is NOT supported on device') }}" }
+        - { cmd: "# {{ step_four_cmd.show_software_authenticity_keys_cmd }}:\n", output: "{{ asa_software_authenticity_keys.stdout_lines | default('Command is NOT supported on device') }}" }
         - { cmd: "# {{ step_three_cmd.verify_sha512_cmd }} {{ asa_image_path }}:\n", output: "{{ asa_image_verify_sha512.stdout_lines | regex_search('verify.*') }}" }
         - { cmd: "# {{ step_three_cmd.verify_md5_cmd }} {{ asa_image_path }}:\n", output: "{{ asa_image_verify_md5.stdout_lines | regex_search('verify.*') }}" }
         - { cmd: "# {{ step_five_cmd.show_version_cmd }}:\n", output: "{{ asa_version.stdout_lines }}" }
@@ -399,3 +421,4 @@
         - { cmd: "# {{ step_seven_cmd.show_run_webvpn }}:\n", output: "{{ asa_webvpn.stdout_lines }}" }
         - { cmd: "# {{ step_seven_cmd.show_import_webvpn_plugin_detail }}:\n", output: "{{ asa_webvpn_plugin.stdout_lines }}" }
         - { cmd: "# {{ step_eight_cmd.show_memory_region_cmd }}:\n", output: "{{ asa_memory_region.stdout_lines }}" }
+

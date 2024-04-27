@@ -309,7 +309,7 @@
     - name: Step Four - Verify Digitally Signed Image Authenticity - show software authenticity file
       cisco.asa.asa_command:
         commands:
-          - "{{ step_four_cmd.show_software_authenticity_file_cmd }}"
+          - "{{ step_four_cmd.show_software_authenticity_file_cmd }} {{ asa_image_path }}"
       register: asa_software_authenticity_file
       ignore_errors: true
       failed_when: "'FAILED' in asa_dir_recursive_cache"
@@ -410,7 +410,7 @@
         - { cmd: "# {{ step_two_cmd.show_conn_all_cmd }}:\n", output: "{{ asa_conn_all.stdout_lines }}" }
         - { cmd: "# {{ step_two_cmd.show_xlate_cmd }}:\n", output: "{{ asa_xlate.stdout_lines }}" }
         - { cmd: "# {{ step_two_cmd.show_aaa_login_history_cmd }}:\n", output: "{{ asa_aaa_login_history.stdout_lines }}" }
-        - { cmd: "# {{ step_four_cmd.show_software_authenticity_file_cmd }}:\n", output: "{{ asa_software_authenticity_file.stdout_lines | default('Command is NOT supported on device') }}" }
+        - { cmd: "# {{ step_four_cmd.show_software_authenticity_file_cmd }} {{ asa_image_path }}:\n", output: "{{ asa_software_authenticity_file.stdout_lines | default('Command is NOT supported on device') }}" }
         - { cmd: "# {{ step_four_cmd.show_software_authenticity_running_cmd }}:\n", output: "{{ asa_software_authenticity_running.stdout_lines | default('Command is NOT supported on device') }}" }
         - { cmd: "# {{ step_four_cmd.show_software_authenticity_keys_cmd }}:\n", output: "{{ asa_software_authenticity_keys.stdout_lines | default('Command is NOT supported on device') }}" }
         - { cmd: "# {{ step_three_cmd.verify_sha512_cmd }} {{ asa_image_path }}:\n", output: "{{ asa_image_verify_sha512.stdout_lines | regex_search('verify.*') }}" }
